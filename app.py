@@ -1111,9 +1111,14 @@ def admin_delete_variable(var_id):
 
     return redirect(url_for('admin_variables'))
 
-import os
+with app.app_context():
+    db.create_all()
+    
+    from models import SiteLocation
+    if SiteLocation.query.first() is None:
+        seed_database()
 
 if __name__ == '__main__':
-    seed_database()
     port = int(os.environ.get("PORT", 5001))
     app.run(host='0.0.0.0', port=port, debug=False)
+
